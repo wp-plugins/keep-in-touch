@@ -59,7 +59,7 @@ works with other formats, although the implementation is quite generic.
 
 The plugin registers an option page that enables admins to:
 
-* configure the weekday and time-of-day when 
+* configure the weekday and time-of-day when the digests are sent
 * (re)send the digest(s) to subscribers or to given email addresses
 * send a newsletter to subscribers or to given email addresses
 
