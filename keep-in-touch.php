@@ -2,15 +2,15 @@
 
 /*
 Plugin Name: Keep in Touch
-Plugin URI: http://URI_Of_Page_Describing_Plugin_and_Updates
+Plugin URI: https://wordpress.org/plugins/keep-in-touch/
 Description: Maintains a list of subscribers to updates and newsletter.
-Version: 1.0.1
+Version: 1.0.2
 Author: Racanu
-#Author URI: http://URI_Of_The_Plugin_Author
+Author URI: https://profiles.wordpress.org/racanu/
 Text Domain: keep-in-touch
 #Domain Path: Optional. Plugin's relative directory path to .mo files. Example: /locale/
 #Network: Optional. Whether the plugin can only be activated network wide. Example: true
-#License: A short license name. Example: GPL2
+License: GPL2
 */
 
 defined('ABSPATH') or die ('No direct access to this file.');
@@ -48,16 +48,6 @@ include_once('class-keep-in-touch-widget.php');
 
 class Keep_In_Touch
 {
-	var $weekdays = array(
-		'sunday',
-		'monday',
-		'tuesday',
-		'wednesday',
-		'thursday',
-		'friday',
-		'saturday',
-	);
-
 	public function __construct()
 	{
 		add_action('init', 'Keep_In_Touch::init_translation');
@@ -298,13 +288,14 @@ class Keep_In_Touch
 				self::explode_recipients($_POST['newsletter_recipients'])
 			);
 		
-		echo '<div class="wrap">';
-
-		echo '<h2>' . __('Digest delivery settings', 'keep-in-touch') . '</h2>';
-		echo '<form method="POST" action="/wordpress/wp-admin/options-general.php?page=keep-in-touch">';
-		echo '<input type="hidden" name="form" value="keep_in_touch_digest_delivery_settings" />';
-		echo '<table class="form-table"><tr>';
-		echo '<th scope="row">' . __('Delivery weekday', 'keep-in-touch') . '</th>';
+		echo
+			'<div class="wrap">' .
+			
+			'<h2>' . __('Digest delivery settings', 'keep-in-touch') . '</h2>' .
+			'<form method="POST" action="/wordpress/wp-admin/options-general.php?page=keep-in-touch">' .
+			'<input type="hidden" name="form" value="keep_in_touch_digest_delivery_settings" />' .
+			'<table class="form-table"><tr>' .
+			'<th scope="row">' . __('Delivery weekday', 'keep-in-touch') . '</th>';
 		$wp_locale = new WP_Locale();
 		echo '<td><select name="delivery_weekday">';
 		for ($wdi = 0; $wdi < 7; $wdi++)
@@ -312,10 +303,11 @@ class Keep_In_Touch
 			$selected = (($wdi==get_option('keep_in_touch_delivery_weekday'))?'selected="selected" ':'');
 			echo '<option ' . $selected . 'value="' . $wdi . '">' . $wp_locale->get_weekday($wdi) . '</option>';
 		}
-		echo '</select><p class="description">' . __('The day of the week in which the weekly digest will be delivered', 'keep-in-touch') . '</p></td>';
-		echo '</tr><tr>';
-		echo '<th scope="row">' . __('Delivery time', 'keep-in-touch') . '</th>';
-		echo '<td><select name="delivery_hour">';
+		echo 
+			'</select><p class="description">' . __('The day of the week in which the weekly digest will be delivered', 'keep-in-touch') . '</p></td>' .
+			'</tr><tr>' .
+			'<th scope="row">' . __('Delivery time', 'keep-in-touch') . '</th>' .
+			'<td><select name="delivery_hour">';
 		for ($h = 0; $h < 24; $h++)
 			echo '<option ' . (($h==self::get_hour(get_option('keep_in_touch_delivery_time')))?'selected="selected" ':'') . 'value="' . sprintf('%02d', $h) . '">' . sprintf('%02d', $h) . '</option>';
 		echo '</select>&nbsp;:&nbsp;<select name="delivery_minute">';
@@ -325,50 +317,52 @@ class Keep_In_Touch
 			$value = sprintf('%02d', $m);
 			echo '<option ' . $selected . 'value="' . $value . '">' . $value . '</option>';
 		}
-		echo '</select>';
-		echo '<p class="description">' . __('The time of the day in which the daily and weekly digests will be delivered', 'keep-in-touch') . '</p></td>';
-		echo '</tr><tr>';
-		echo '<th scope="row"></th>';
-		echo '<td><input type="submit" name="save_settings" class="button-primary" value="' . __('Save settings', 'keep-in-touch') . '" /></td>';
-		echo '</tr></table class="form-table">';
-		echo '</form>';
+		echo 
+			'</select>' .
+			'<p class="description">' . __('The time of the day in which the daily and weekly digests will be delivered', 'keep-in-touch') . '</p></td>' .
+			'</tr><tr>' .
+			'<th scope="row"></th>' .
+			'<td><input type="submit" name="save_settings" class="button-primary" value="' . __('Save settings', 'keep-in-touch') . '" /></td>' .
+			'</tr></table class="form-table">' .
+			'</form>' .
 
-		echo '<h2>' . __('Send digest now', 'keep-in-touch') . '</h2>';
-		echo '<form method="POST" action="/wordpress/wp-admin/options-general.php?page=keep-in-touch">';
-		echo '<input type="hidden" name="form" value="keep_in_touch_send_digest_now" />';
-		echo '<table class="form-table"><tr>';
-		echo '<th scope="row">'. __('Email addresses to send to', 'keep-in-touch') . '</th>';
-		echo '<td><input type="text" name="digest_recipients" placeholder="' . __('Enter comma-separated list of email addresses', 'keep-in-touch') . '" size="80" />';
-		echo '<p class="description">' . sprintf(__('or leave empty to send to %d daily digest or %d weekly digest confirmed subscribers', 'keep-in-touch'), count(Keep_In_Touch_Db::get_all_confirmed_daily_digest_subscribers()), count(Keep_In_Touch_Db::get_all_confirmed_weekly_digest_subscribers())) . '</p></td>';
-		echo '</tr><tr>';
-		echo '<th scope="row"></th>';
-		echo '<td><input type="submit" name="send_daily_digest" class="button-primary" value="' . __('Send daily digest now', 'keep-in-touch') . '" />&nbsp;';
-		echo '<input type="submit" name="send_weekly_digest" class="button-primary" value="' . __('Send weekly digest now', 'keep-in-touch') . '" /></td>';
-		echo '</tr></table>';
-		echo '</form>';
+			'<h2>' . __('Send digest now', 'keep-in-touch') . '</h2>' .
+			'<form method="POST" action="/wordpress/wp-admin/options-general.php?page=keep-in-touch">' .
+			'<input type="hidden" name="form" value="keep_in_touch_send_digest_now" />' .
+			'<table class="form-table"><tr>' .
+			'<th scope="row">'. __('Email addresses to send to', 'keep-in-touch') . '</th>' .
+			'<td><input type="text" name="digest_recipients" placeholder="' . __('Enter comma-separated list of email addresses', 'keep-in-touch') . '" size="80" />' .
+			'<p class="description">' . sprintf(__('or leave empty to send to %d daily digest or %d weekly digest confirmed subscribers', 'keep-in-touch'), count(Keep_In_Touch_Db::get_all_confirmed_daily_digest_subscribers()), count(Keep_In_Touch_Db::get_all_confirmed_weekly_digest_subscribers())) . '</p></td>' .
+			'</tr><tr>' .
+			'<th scope="row"></th>' .
+			'<td><input type="submit" name="send_daily_digest" class="button-primary" value="' . __('Send daily digest now', 'keep-in-touch') . '" />&nbsp;' .
+			'<input type="submit" name="send_weekly_digest" class="button-primary" value="' . __('Send weekly digest now', 'keep-in-touch') . '" /></td>' .
+			'</tr></table>' .
+			'</form>' .
 		
-		echo '<h2>' . __('Newsletter', 'keep-in-touch') . '</h2>';
-		echo '<form method="POST" action="/wordpress/wp-admin/options-general.php?page=keep-in-touch">';
-		echo '<input type="hidden" name="form" value="keep_in_touch_send_newsletter" />';
-		echo '<table class="form-table"><tr>';
-		echo '<th scope="row">'. __('Email addresses to send to', 'keep-in-touch') . '</th>';
-		echo '<td><input type="text" name="newsletter_recipients" placeholder="' . __('Enter comma-separated list of email addresses', 'keep-in-touch') . '" size="80" />';
-		echo '<p class="description">' . sprintf(__('or leave empty to send to %d confirmed newsletter subscribers', 'keep-in-touch'), count(Keep_In_Touch_Db::get_all_confirmed_newsletter_subscribers())) . '</p></td>';
-		echo '</tr><tr>';
-		echo '<th scope="row">'. __('Subject', 'keep-in-touch') . '</th>';
-		echo '<td><input type="text" name="newsletter_message_title" placeholder="' . __('Enter the subject of the newsletter message', 'keep-in-touch') . '" size="80" />';
-		echo '</tr><tr>';
-		echo '<th scope="row">' . __('Message', 'keep-in-touch') . '</th>';
-		echo '<td>';
+			'<h2>' . __('Newsletter', 'keep-in-touch') . '</h2>' .
+			'<form method="POST" action="/wordpress/wp-admin/options-general.php?page=keep-in-touch">' .
+			'<input type="hidden" name="form" value="keep_in_touch_send_newsletter" />' .
+			'<table class="form-table"><tr>' .
+			'<th scope="row">'. __('Email addresses to send to', 'keep-in-touch') . '</th>' .
+			'<td><input type="text" name="newsletter_recipients" placeholder="' . __('Enter comma-separated list of email addresses', 'keep-in-touch') . '" size="80" />' .
+			'<p class="description">' . sprintf(__('or leave empty to send to %d confirmed newsletter subscribers', 'keep-in-touch'), count(Keep_In_Touch_Db::get_all_confirmed_newsletter_subscribers())) . '</p></td>' .
+			'</tr><tr>' .
+			'<th scope="row">'. __('Subject', 'keep-in-touch') . '</th>' .
+			'<td><input type="text" name="newsletter_message_title" placeholder="' . __('Enter the subject of the newsletter message', 'keep-in-touch') . '" size="80" />' .
+			'</tr><tr>' .
+			'<th scope="row">' . __('Message', 'keep-in-touch') . '</th>' .
+			'<td>';
 		wp_editor('', 'newsletter_message_text', array('textarea_name' => 'newsletter_message_text', 'drag_drop_upload' => 'true', 'editor_css' => '<style>textarea {height: 15em; width: 50em;}</style>', ));
-		echo '</td>';		
-		echo '</tr><tr>';
-		echo '<th scope="row"></th>';
-		echo '<td><input type="submit" name="send_newsletter" class="button-primary" value="' . __('Send newsletter message', 'keep-in-touch') . '" /></td>';
-		echo '</tr></table>';
-		echo '</form>';
+		echo
+			'</td>' .
+			'</tr><tr>' .
+			'<th scope="row"></th>' .
+			'<td><input type="submit" name="send_newsletter" class="button-primary" value="' . __('Send newsletter message', 'keep-in-touch') . '" /></td>' .
+			'</tr></table>' .
+			'</form>' .
 				
-		echo '</div>';
+			'</div>';
 	}
 
 	//static function ajax_action_callback()

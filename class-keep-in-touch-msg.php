@@ -7,6 +7,25 @@ include_once('class-virtual-page.php');
 
 class Keep_In_Touch_Msg
 {
+	//static $style_table = 'width: 100%; font-family: \'Arial\'; margin: 25px auto; border-collapse: collapse; border: 1px solid #eee; border-bottom: 2px solid #776B53; ';
+	static $style_table = 'width: 100%; font-family: \'Arial\'; margin: 25px auto; border-collapse: collapse; border: 1px solid #eee; border-bottom: 2px solid #000000; ';
+	//static $style_table_th_or_table_td = 'background: #F4EDDF; color: #776B53; border: 1px solid #eee; padding: 12px 35px; border-collapse: collapse; text-align: left; ';
+	static $style_table_th_or_table_td = 'background: none; color: #000000; border-top: 2px solid #000000; border-bottom: 2px solid #000000; padding: 12px 35px; border-collapse: collapse; text-align: left; ';
+	//static $style_table_th = 'background: #776B53; color: #F4EDDF; text-transform: uppercase; font-size: 12px; ';
+	static $style_table_th = 'background: none; color: #000000; text-transform: uppercase; font-size: 12px; ';
+	static $style_col_1 = 'text-align: left; width: 30%; ';
+	static $style_col_2 = 'text-align: left; ';
+	//static $style_a = 'color: #776B53; text-decoration: underline; ';
+	static $style_a = 'color: #000000; text-decoration: underline; ';
+
+	static function initialize_style_options()
+	{
+		//if (!get_option('keep_in_touch_style_table'))
+		//	update_option('keep_in_touch_style_table', self::$style_table);
+
+		//self::$style_table = get_option('keep_in_touch_style_table');
+	}
+
 	static function emit_subscription_anti_robot($email)
 	{
 		new Virtual_Page(array(
@@ -185,18 +204,31 @@ class Keep_In_Touch_Msg
 
 		if ($query->found_posts == 0)
 		{
-			$message = '<p>' . __('As it seems we haven\'t been very active lately. There are no new posts. Maybe you can contribute some yourself ;)', 'keep-in-touch') . '</p>';
+			$message = 
+				'<p>' . __('As it seems, we haven\'t been very active lately.', 'keep-in-touch') . '</p>' .
+				'<p>' . __('There are no new posts.', 'keep-in-touch') . '</p>' .
+				'<p>' . __('Maybe you can contribute some yourself ;)', 'keep-in-touch') . '</p>';
 		}
 		else
 		{
-			$message = $message . '<p>' . __('These are the articles published lately on our site:', 'keep-in-touch') . '</p>';
-			$message = $message . '<ul>';
+			$message = $message .
+				'<p>' . __('These are the articles published lately on our site:', 'keep-in-touch') . '</p>' .
+				'<table style="' . self::$style_table . '">' .
+				'<col style="' . self::$style_col_1 . '"><col style="' . self::$style_col_2 . '">' .
+				'<thead><tr>' .
+				'<th style="' . self::$style_table_th_or_table_td . self::$style_table_th . '">' . __('Date', 'keep-in-touch') . '</th>' .
+				'<th style="' . self::$style_table_th_or_table_td . self::$style_table_th . '">' . __('Title', 'keep-in-touch') . '</th>' .
+				'</tr></thead>' .
+				'<tbody>';
 			while ($query->have_posts())
 			{
 				$query->next_post();
-				$message = $message . '<li><a href="' . get_permalink($query->post->ID) . '">' . get_the_title($query->post->ID) . '</a></li>';
+				$message = $message . '<tr>' .					
+					'<td style="' . self::$style_table_th_or_table_td . '">' . get_the_date('', $query->post->ID) . '</td>' .
+					'<td style="' . self::$style_table_th_or_table_td . '"><a style="' . self::$style_a . '" href="' . get_permalink($query->post->ID) . '">' . get_the_title($query->post->ID) . '</a></td>' .
+					'</tr>';
 			}
-			$message = $message . '</ul>';
+			$message = $message . '</tbody></table>';
 			//$message = $message . '<p>' . 'Articles found: ' . $query->found_posts . '</p>';
 		}
 		
@@ -228,6 +260,8 @@ class Keep_In_Touch_Msg
 
 	static function get_unsubscribe_text_from_email($email)
 	{
-		return sprintf(__('To cancel your subscription. use the following link: %s', 'keep-in-touch'), Keep_In_Touch_Utils::get_unsubscribe_link_from_email($email));
+		$link = Keep_In_Touch_Utils::get_unsubscribe_link_from_email($email);
+		$a = sprintf('<a href="%s" style="%s">%s</a>', $link, self::$style_a, $link);
+		return sprintf(__('To cancel your subscription. use the following link: %s', 'keep-in-touch'), $a);
 	}
 }
