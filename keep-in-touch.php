@@ -4,7 +4,7 @@
 Plugin Name: Keep in Touch
 Plugin URI: http://URI_Of_Page_Describing_Plugin_and_Updates
 Description: Maintains a list of subscribers to updates and newsletter.
-Version: 1.0.0
+Version: 1.0.1
 Author: Racanu
 #Author URI: http://URI_Of_The_Plugin_Author
 Text Domain: keep-in-touch

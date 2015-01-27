@@ -53,7 +53,7 @@ for the weekly digest and the newsletter.
 
 Only tested with the permalink format set as
 "/index.php/%year%/%monthnum%/%day%/%postname%/" on a Windows server. Don't know if it
-works with other formats although the implementation is as generic as I could make it.
+works with other formats, although the implementation is quite generic.
 
 **Options page**
 
@@ -61,6 +61,7 @@ The plugin registers an option page that enables admins to:
 
 * configure the weekday and time-of-day when 
 * (re)send the digest(s) to subscribers or to given email addresses
+* send a newsletter to subscribers or to given email addresses
 
 **Wishlist**
 
@@ -78,6 +79,9 @@ Some features to be added in some future version:
 3. Place the shortcode(s) you need in your post
 
 == Changelog ==
+
+= 1.0.1 =
+* Small readme change
 
 = 1.0.0 =
 * First release
