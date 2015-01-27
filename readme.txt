@@ -40,9 +40,9 @@ confirm the request, with a link containing a unique code.
 To keep it simple, no check is performed as to whether a user is already registered or
 not. Any request can be performed in any phase of the process.
 
-Weekly emails are sent using wp_mail(), on a fixed day (Sunday) at a fixed time (6:00 am
-UTC). Even when no posts have been added, the user will still receive and email to inform
-her of that.
+Weekly emails are sent using wp_mail(), on a configurable weekday at a configurable time.
+Even when no posts have been added, the user will still receive and email to inform her of
+that.
 
 The emails will all contain the heading image of the theme at the top.
 
