@@ -3,7 +3,7 @@ Contributors: racanu
 Tags: digest, contact, subscribe, newsletter
 Requires at least: 4.1
 Tested up to: 4.1
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -79,6 +79,12 @@ Some features to be added in some future version:
 3. Place the shortcode(s) you need in your post
 
 == Changelog ==
+
+= 1.0.1 =
+* Fixed escaped quotes in urls to media in newsletter
+
+= 1.0.2 =
+* Added styles to digest messages to show the list as a table
 
 = 1.0.1 =
 * Small readme change

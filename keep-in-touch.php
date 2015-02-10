@@ -4,7 +4,7 @@
 Plugin Name: Keep in Touch
 Plugin URI: https://wordpress.org/plugins/keep-in-touch/
 Description: Maintains a list of subscribers to updates and newsletter.
-Version: 1.0.2
+Version: 1.0.3
 Author: Racanu
 Author URI: https://profiles.wordpress.org/racanu/
 Text Domain: keep-in-touch
@@ -284,7 +284,7 @@ class Keep_In_Touch
 		else if ($_POST['form'] == 'keep_in_touch_send_newsletter' and isset($_POST['send_newsletter']))
 			self::send_newsletter(
 				$_POST['newsletter_message_title'],
-				$_POST['newsletter_message_text'],
+				stripcslashes($_POST['newsletter_message_text']),
 				self::explode_recipients($_POST['newsletter_recipients'])
 			);
 		
@@ -353,7 +353,16 @@ class Keep_In_Touch
 			'</tr><tr>' .
 			'<th scope="row">' . __('Message', 'keep-in-touch') . '</th>' .
 			'<td>';
-		wp_editor('', 'newsletter_message_text', array('textarea_name' => 'newsletter_message_text', 'drag_drop_upload' => 'true', 'editor_css' => '<style>textarea {height: 15em; width: 50em;}</style>', ));
+		wp_editor(
+			'',
+			'newsletter_message_text',
+			array(
+				'textarea_name' => 'newsletter_message_text',
+				'drag_drop_upload' => 'true',
+				'editor_css' => '<style>textarea {height: 15em; width: 50em;}</style>', 
+				'media_buttons' => true,
+			)
+		);
 		echo
 			'</td>' .
 			'</tr><tr>' .

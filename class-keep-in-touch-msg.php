@@ -243,7 +243,7 @@ class Keep_In_Touch_Msg
 				$title, 
 				self::get_email_heading() . 
 					$message . 
-					'<p>' . self::get_unsubscribe_text_from_email($recipient) . '</p>',
+					'<p><small>' . self::get_unsubscribe_text_from_email($recipient) . '</small></p>',
 				'Content-type: text/html'
 			);
 	}
