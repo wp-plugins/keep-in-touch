@@ -21,8 +21,8 @@ class Keep_In_Touch_Widget extends WP_Widget
 
 		echo $before_widget;
 		echo $before_title . __('Keep in Touch', 'keep-in-touch') . $after_title;
+		echo '<p>' . __('Receive a weekly digest of the posts.', 'keep-in-touch') . '</p>';
 		echo '<form method="post" action="' . home_url(Keep_In_Touch_Utils::get_page_path_from_slug(Keep_In_Touch_Utils::$PAGE_SLUG)) . '">';
-		echo __('Receive a weekly digest of the posts.', 'keep-in-touch') . '<br />';
 		echo '<input placeholder="' . __('Enter email', 'keep-in-touch') . '" name="keep_in_touch_email" ';
 		if (is_user_logged_in())
 		{
@@ -30,9 +30,11 @@ class Keep_In_Touch_Widget extends WP_Widget
 			get_currentuserinfo();
 			echo 'value="' . $current_user->user_email . '" ';
 		}
-		echo '/><br />';
+		echo '/>';
 		echo '<input type="submit" name="keep_in_touch_submit" value="' . __('Sign up', 'keep-in-touch') . '" />';
+		echo sprintf('<a href="%s"><img src="%s" style="max-width:20px;max-height:20px;vertical-align:middle;float:right;"/></a>', home_url(Keep_In_Touch_Utils::get_page_path_from_slug('feed')), plugins_url( 'rss-logo.png', __FILE__ ));
 		echo '</form>';
+		//echo '<p>' . sprintf(__('Or subscribe to our %s', 'keep-in-touch'), sprintf('<a href="%s">%s</a>', home_url(Keep_In_Touch_Utils::get_page_path_from_slug('feed')), __('RSS feed', 'keep-in-touch'))) . '</p>';
 		echo $after_widget;
 	}
 	
