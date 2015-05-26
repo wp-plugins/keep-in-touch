@@ -292,7 +292,7 @@ class Keep_In_Touch
 			'<div class="wrap">' .
 			
 			'<h2>' . __('Digest delivery settings', 'keep-in-touch') . '</h2>' .
-			'<form method="POST" action="/wordpress/wp-admin/options-general.php?page=keep-in-touch">' .
+			'<form method="POST" action="' . admin_url('options-general.php?page=keep-in-touch') . '">' .
 			'<input type="hidden" name="form" value="keep_in_touch_digest_delivery_settings" />' .
 			'<table class="form-table"><tr>' .
 			'<th scope="row">' . __('Delivery weekday', 'keep-in-touch') . '</th>';
@@ -327,7 +327,7 @@ class Keep_In_Touch
 			'</form>' .
 
 			'<h2>' . __('Send digest now', 'keep-in-touch') . '</h2>' .
-			'<form method="POST" action="/wordpress/wp-admin/options-general.php?page=keep-in-touch">' .
+			'<form method="POST" action="' . admin_url('options-general.php?page=keep-in-touch') . '">' .
 			'<input type="hidden" name="form" value="keep_in_touch_send_digest_now" />' .
 			'<table class="form-table"><tr>' .
 			'<th scope="row">'. __('Email addresses to send to', 'keep-in-touch') . '</th>' .
@@ -341,7 +341,7 @@ class Keep_In_Touch
 			'</form>' .
 		
 			'<h2>' . __('Newsletter', 'keep-in-touch') . '</h2>' .
-			'<form method="POST" action="/wordpress/wp-admin/options-general.php?page=keep-in-touch">' .
+			'<form method="POST" action="' . admin_url('options-general.php?page=keep-in-touch') . '">' .
 			'<input type="hidden" name="form" value="keep_in_touch_send_newsletter" />' .
 			'<table class="form-table"><tr>' .
 			'<th scope="row">'. __('Email addresses to send to', 'keep-in-touch') . '</th>' .
