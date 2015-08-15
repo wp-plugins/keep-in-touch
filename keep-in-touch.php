@@ -4,7 +4,7 @@
 Plugin Name: Keep in Touch
 Plugin URI: https://wordpress.org/plugins/keep-in-touch/
 Description: Maintains a list of subscribers to updates and newsletter.
-Version: 1.0.3
+Version: 1.0.7
 Author: Racanu
 Author URI: https://profiles.wordpress.org/racanu/
 Text Domain: keep-in-touch
