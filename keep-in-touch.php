@@ -4,7 +4,7 @@
 Plugin Name: Keep in Touch
 Plugin URI: https://wordpress.org/plugins/keep-in-touch/
 Description: Maintains a list of subscribers to updates and newsletter.
-Version: 1.0.3
+Version: 1.0.7
 Author: Racanu
 Author URI: https://profiles.wordpress.org/racanu/
 Text Domain: keep-in-touch
@@ -265,29 +265,40 @@ class Keep_In_Touch
 		return intval(date('i', strtotime($time)));
 	}
 	
-	static function plugin_options()
+	static function handle_plugin_options_action()
 	{
 		if (!current_user_can('manage_options'))
 			wp_die(__('You do not have sufficient permissions to access this page.'));
-
+		
 		if ($_POST['form'] == 'keep_in_touch_digest_delivery_settings')
 		{
 			update_option('keep_in_touch_delivery_weekday', $_POST['delivery_weekday']);
 			update_option('keep_in_touch_delivery_time', Keep_In_Touch_Utils::format_time($_POST['delivery_hour'] * 3600 + $_POST['delivery_minute'] * 60));
 			self::reschedule_daily_event();
 			self::reschedule_weekly_event();
+			update_option('keep_in_touch_header_image_option', $_POST['header_image_option']);
+			update_option('keep_in_touch_header_image_custom_path', trim($_POST['header_image_custom_path']));
 		}
 		else if ($_POST['form'] == 'keep_in_touch_send_digest_now' and isset($_POST['send_daily_digest']))
+		{
 			self::send_daily_digest(self::explode_recipients($_POST['digest_recipients']));
+		}
 		else if ($_POST['form'] == 'keep_in_touch_send_digest_now' and isset($_POST['send_weekly_digest']))
+		{
 			self::send_weekly_digest(self::explode_recipients($_POST['digest_recipients']));
+		}
 		else if ($_POST['form'] == 'keep_in_touch_send_newsletter' and isset($_POST['send_newsletter']))
+		{
 			self::send_newsletter(
 				$_POST['newsletter_message_title'],
 				stripcslashes($_POST['newsletter_message_text']),
 				self::explode_recipients($_POST['newsletter_recipients'])
 			);
-		
+		}
+	}
+	
+	static function generate_plugin_options_page()
+	{
 		echo
 			'<div class="wrap">' .
 			
@@ -321,11 +332,17 @@ class Keep_In_Touch
 			'</select>' .
 			'<p class="description">' . __('The time of the day in which the daily and weekly digests will be delivered', 'keep-in-touch') . '</p></td>' .
 			'</tr><tr>' .
+			'<th scope="row">' . __('Header image', 'keep-in-touch') . '</th>' .
+			'<td><select name="header_image_option">' . 
+			'<option value="get_header_image"' . ((get_option('keep_in_touch_header_image_option')=='get_header_image')?' selected="selected"':'') . '>' . __('Use get_header_image()', 'keep-in-touch') . '</option>' .
+			'<option value="custom_path"' . ((get_option('keep_in_touch_header_image_option')=='custom_path')?' selected="selected"':'') . '>' . __('Use custom path', 'keep-in-touch') . '</option>' .
+			'</select><input type="text" name="header_image_custom_path" placeholder="' . __('Enter custom path to header image', 'keep-in-touch') . '" size="80" value="' . get_option('keep_in_touch_header_image_custom_path') . '" /></td>' .
+			'</tr><tr>' .
 			'<th scope="row"></th>' .
 			'<td><input type="submit" name="save_settings" class="button-primary" value="' . __('Save settings', 'keep-in-touch') . '" /></td>' .
 			'</tr></table class="form-table">' .
-			'</form>' .
-
+			'</form>';
+		echo
 			'<h2>' . __('Send digest now', 'keep-in-touch') . '</h2>' .
 			'<form method="POST" action="' . admin_url('options-general.php?page=keep-in-touch') . '">' .
 			'<input type="hidden" name="form" value="keep_in_touch_send_digest_now" />' .
@@ -338,8 +355,8 @@ class Keep_In_Touch
 			'<td><input type="submit" name="send_daily_digest" class="button-primary" value="' . __('Send daily digest now', 'keep-in-touch') . '" />&nbsp;' .
 			'<input type="submit" name="send_weekly_digest" class="button-primary" value="' . __('Send weekly digest now', 'keep-in-touch') . '" /></td>' .
 			'</tr></table>' .
-			'</form>' .
-		
+			'</form>';
+		echo
 			'<h2>' . __('Newsletter', 'keep-in-touch') . '</h2>' .
 			'<form method="POST" action="' . admin_url('options-general.php?page=keep-in-touch') . '">' .
 			'<input type="hidden" name="form" value="keep_in_touch_send_newsletter" />' .
@@ -373,7 +390,13 @@ class Keep_In_Touch
 				
 			'</div>';
 	}
-
+	
+	static function plugin_options()
+	{
+		self::handle_plugin_options_action();
+		self::generate_plugin_options_page();
+	}
+	
 	//static function ajax_action_callback()
 	//{
 	//	global $wpdb; // this is how you get access to the database
@@ -394,5 +417,4 @@ register_deactivation_hook(__FILE__, array('Keep_In_Touch', 'unschedule_events')
 
 //How-to:
 //http://wordpress.stackexchange.com/questions/139071/plugin-generated-virtual-pages
-
 
