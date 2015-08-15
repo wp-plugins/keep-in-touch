@@ -6,19 +6,19 @@ include_once('class-keep-in-touch-utils.php');
 
 class Keep_In_Touch_Widget extends WP_Widget
 {
-    public function Keep_In_Touch_Widget()
-    {
+	public function Keep_In_Touch_Widget()
+	{
 		$this->WP_Widget(
 			'wp_keepintouch',
 			__('Keep in Touch', 'keep-in-touch'), 
 			array('description' => __('Displays a form that allows visitors to subscribe for updates.', 'keep-in-touch'),)
 		);
-    }
-
+	}
+	
 	public function widget($args, $instance)
 	{
 		extract( $args );
-
+		
 		echo $before_widget;
 		echo $before_title . __('Keep in Touch', 'keep-in-touch') . $after_title;
 		echo '<p>' . __('Receive a weekly digest of the posts.', 'keep-in-touch') . '</p>';
