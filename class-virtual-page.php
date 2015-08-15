@@ -12,12 +12,12 @@ class Virtual_Page
 	private $date = NULL;
 	private $dategmt = NULL;
 	private $type = NULL;
-
+	
 	public function __construct($args)
 	{
 		if (!isset($args['slug']))
 			throw new Exception('No slug given for virtual page.');
-
+		
 		$this->slug = $args['slug'];
 		$this->title = isset($args['title']) ? $args['title'] : '';
 		$this->content = isset($args['content']) ? $args['content'] : '';
@@ -25,10 +25,10 @@ class Virtual_Page
 		$this->date = isset($args['date']) ? $args['date'] : current_time('mysql');
 		$this->dategmt = isset($args['date']) ? $args['date'] : current_time('mysql', 1);
 		$this->type = isset($args['type']) ? $args['type'] : 'page';
-
+		
 		add_filter('the_posts', array(&$this, 'virtual_page'));
 	}
-
+	
 	// filter to create virtual page content
 	public function virtual_page($posts)
 	{
@@ -63,10 +63,10 @@ class Virtual_Page
 			$post->post_type = $this->type;
 			$post->post_mime_type = '';
 			$post->comment_count = 0;
-
+			
 			// set filter results
 			$posts = array($post);
-
+			
 			// reset wp_query properties to simulate a found page
 			$wp_query->is_page = true;
 			$wp_query->is_singular = true;
@@ -77,8 +77,7 @@ class Virtual_Page
 			$wp_query->query_vars['error'] = '';
 			$wp_query->is_404 = false;
 		}
-
+		
 		return ($posts);
 	}
 }
-

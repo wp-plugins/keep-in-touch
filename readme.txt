@@ -2,8 +2,8 @@
 Contributors: racanu
 Tags: digest, contact, subscribe, newsletter
 Requires at least: 4.1
-Tested up to: 4.2
-Stable tag: 1.0.5
+Tested up to: 4.2.3
+Stable tag: 1.0.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -79,6 +79,9 @@ Some features to be added in some future version:
 3. Place the shortcode(s) you need in your post
 
 == Changelog ==
+
+= 1.0.6 =
+* Added option to set path to header image
 
 = 1.0.5 =
 * Fixed hardcoded path to admin_url. Thanks to msorin for reporting it.

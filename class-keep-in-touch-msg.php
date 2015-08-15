@@ -17,7 +17,7 @@ class Keep_In_Touch_Msg
 	static $style_col_2 = 'text-align: left; ';
 	//static $style_a = 'color: #776B53; text-decoration: underline; ';
 	static $style_a = 'color: #000000; text-decoration: underline; ';
-
+	
 	static function initialize_style_options()
 	{
 		//if (!get_option('keep_in_touch_style_table'))
@@ -25,7 +25,7 @@ class Keep_In_Touch_Msg
 
 		//self::$style_table = get_option('keep_in_touch_style_table');
 	}
-
+	
 	static function emit_subscription_anti_robot($email)
 	{
 		new Virtual_Page(array(
@@ -56,7 +56,7 @@ class Keep_In_Touch_Msg
 	{
 		$link = home_url(Keep_In_Touch_Utils::get_page_path_from_slug(Keep_In_Touch_Utils::$PAGE_SLUG)) . '?confirmation_code=' . $confirmation_code;
 		$common_content = '<p>' . __('Thank you for subscribing to updates from us.', 'keep-in-touch') . '</p>';
-
+		
 		wp_mail(
 			$email,
 			Keep_In_Touch_Utils::get_blog_marker() . __('Confirm subscription', 'keep-in-touch'), 
@@ -65,7 +65,7 @@ class Keep_In_Touch_Msg
 				'<p>' . sprintf(__('To confirm the subscription, use the following link: %s', 'keep-in-touch'), $link) . '</p>',
 			'Content-type: text/html'
 		);
-
+		
 		// emit page or redirect? otherwise we get a 404
 		new Virtual_Page(array(
 			'slug' => Keep_In_Touch_Utils::$PAGE_SLUG,
@@ -81,7 +81,7 @@ class Keep_In_Touch_Msg
 	static function emit_subscription_request_failed($email)
 	{
 		$admin_message = '<p>' . Keep_In_Touch_Utils::get_blog_marker() . sprintf(__('Subscription request failed for email address %s', 'keep-in-touch'), $email) . '</p>';
-
+		
 		wp_mail(
 			get_bloginfo('admin_email'),
 			$admin_message,
@@ -91,7 +91,7 @@ class Keep_In_Touch_Msg
 		
 		$common_content = __('Your subscription request failed.', 'keep-in-touch') . "\n\n";
 			__('An email has been sent to us and we will handle your request shortly.', 'keep-in-touch');
-
+		
 		new Virtual_Page(array(
 			'slug' => Keep_In_Touch_Utils::$PAGE_SLUG,
 			'title' => __('Keep in Touch', 'keep-in-touch'),
@@ -112,7 +112,7 @@ class Keep_In_Touch_Msg
 				self::get_unsubscribe_text_from_email($email),
 			'Content-type: text/html'
 		);
-
+		
 		new Virtual_Page(array(
 			'slug' => Keep_In_Touch_Utils::$PAGE_SLUG,
 			'title' => __('Keep in Touch', 'keep-in-touch'),
@@ -123,7 +123,7 @@ class Keep_In_Touch_Msg
 	static function emit_confirm_cancellation($email, $confirmation_code)
 	{	
 		$link = home_url(Keep_In_Touch_Utils::get_page_path_from_slug(Keep_In_Touch_Utils::$PAGE_SLUG) . '?confirmation_code=' . $confirmation_code);
-
+		
 		wp_mail(
 			$email,
 			Keep_In_Touch_Utils::get_blog_marker() . __('Confirm cancellation', 'keep-in-touch'),
@@ -133,7 +133,7 @@ class Keep_In_Touch_Msg
 				'<p>' . sprintf(__('To confirm the request, use the following link: %s', 'keep-in-touch'), $link) . '</p>',
 			'Content-type: text/html'
 		);
-
+		
 		new Virtual_Page(array(
 			'slug' => Keep_In_Touch_Utils::$PAGE_SLUG,
 			'title' => __('Keep in Touch', 'keep-in-touch'),
@@ -142,20 +142,19 @@ class Keep_In_Touch_Msg
 				'<p>' . self::get_junk_mail_notice_text() . '</p>', 
 		));
 	}
-				
+		
 	static function emit_cancellation_request_failed($email)
 	{		
 		$admin_message = Keep_In_Touch_Utils::get_blog_marker() . 
 			sprintf(__('Cancellation request failed for email address %s', 'keep-in-touch'), $email);
-
+		
 		wp_mail(
 			get_bloginfo('admin_email'),
 			$admin_message,
 			self::get_email_heading() . $admin_message,
 			'Content-type: text/html'
 		);
-
-
+		
 		new Virtual_Page(array(
 			'slug' => Keep_In_Touch_Utils::$PAGE_SLUG,
 			'title' => __('Keep in Touch', 'keep-in-touch'),
@@ -247,17 +246,36 @@ class Keep_In_Touch_Msg
 				'Content-type: text/html'
 			);
 	}
-
+	
+	static function get_configured_header_image_url()
+	{
+		if (get_option('keep_in_touch_header_image_option') == 'get_header_image')
+		{
+			return get_header_image();
+		}
+		
+		if (get_option('keep_in_touch_header_image_option') == 'custom_path')
+		{
+			$custom_path = get_option('keep_in_touch_header_image_custom_path');
+			if (Keep_In_Touch_Utils::startsWith('/', $custom_path))
+				return get_home_url(null, $custom_path);
+			else
+				return $custom_path;
+		}
+		
+		return "";
+	}
+	
 	static function get_email_heading()
 	{
-		return '<p><a href="' . get_home_url() . '" alt="' . get_bloginfo('name') . '"><img src="' . get_header_image() . '"></a></p>';
+		return '<p><a href="' . get_home_url() . '" alt="' . get_bloginfo('name') . '"><img src="' . self::get_configured_header_image_url() . '"></a></p>';
 	}
 	
 	static function get_junk_mail_notice_text()
 	{
 		return __('Also check your junk mail folder as the message is sometimes place there.', 'keep-in-touch');
 	}
-
+	
 	static function get_unsubscribe_text_from_email($email)
 	{
 		$link = Keep_In_Touch_Utils::get_unsubscribe_link_from_email($email);
